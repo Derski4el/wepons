@@ -13,50 +13,43 @@ repo = [
     Wepons(2,"Железный меч",10.0,1000),
     Wepons(3,"Железный топор",12.0,1000),
 ]
+next_id = 4
 
 @app.get("/")
 def get_orders():
     return repo
 
+
 @app.post("/")
 def editor(data=Body()):
+    global next_id
     id = data.get("id")
-    for o in repo:
-        if o.id == id:
-            id = data.get("id")
-            name = data.get("name")
-            damage = data.get("damage")
-            durability = data.get("durability")
+    if id is not None:
+        for i,o in enumerate(repo):
+            if o.id == id:
+                name = data.get("name")
+                damage = data.get("damage")
+                durability = data.get("durability")
 
-            bufer = Wepons(id,name,damage,durability)
-            repo[id] = bufer
-            
-
-            return {"message": "Оружие обновлена"}, 201
-        
-    id = data.get("id")
+                bufer = Wepons(id,name,damage,durability)
+                repo[id] = bufer
+                return {"message": "Оружие обновлена"}, 201
+                 
     name = data.get("name")
     damage = data.get("damage")
     durability = data.get("durability")
-
-    bufer = Wepons(id,name,damage,durability)
+    bufer = Wepons(next_id,name,damage,durability)
+    next_id += 1
     repo.append(bufer)
 
     return {"message": "Оружие добавлено"}, 201
 
-@app.post("/del")
-def editor(data=Body()):
+@app.post("/")
+def delete(data=Body()):
     id = data.get("id")
-    for o in repo:
-        if o.id == id:
-            id = data.get("id")
-            name = data.get("name")
-            damage = data.get("damage")
-            durability = data.get("durability")
-
-            bufer = Wepons(id,name,damage,durability)
-            repo[id] = bufer
-            
-
-            return {"message": "Оружие обновлена"}, 201
-    return {"message": "Не верный id"}, 201
+    if id is not None:
+            for i,o in enumerate(repo):
+                 if o.id == id:
+                    del repo[id]
+                    return {"message": "Оружие удалено"}, 201
+    return {"message": "Ошибка, не верный id"}, 201
