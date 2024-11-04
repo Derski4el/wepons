@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список оружия</title>
+</head>
+
+<body>
+    <h1>Список оружия</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Урон</th>
+            <th>Прочность</th>
+        </tr>
+        {% for wepons in wepons %}
+        <tr>
+            <td>{{ wepons.id }}</td>
+            <td>{{ wepons.name }}</td>
+            <td>{{ wepons.damage }}</td>
+            <td>{{ wepons.durability }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
