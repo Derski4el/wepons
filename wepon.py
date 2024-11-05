@@ -1,5 +1,8 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, Request
+from fastapi.templating import Jinja2Templates
+
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 class Wepons:
     def __init__(self, id: int, name: str, damage: float, durability: int) -> None:
@@ -15,12 +18,14 @@ repo = [
 ]
 next_id = 4
 
+
+
 @app.get("/")
-def get_orders():
-    return repo
+def get_wepons(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "wepons": repo})
 
 
-@app.post("/")
+@app.post("/create")
 def editor(data=Body()):
     global next_id
     id = data.get("id")
@@ -44,7 +49,7 @@ def editor(data=Body()):
 
     return {"message": "Оружие добавлено"}, 201
 
-@app.post("/")
+@app.delete("/del")
 def delete(data=Body()):
     id = data.get("id")
     if id is not None:
